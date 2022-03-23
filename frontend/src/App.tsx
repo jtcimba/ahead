@@ -2,7 +2,6 @@ import React, { useEffect, useContext, useCallback } from "react";
 
 import Header from "./Components/Headers";
 import Products from "./Components/ProductTypes/Products";
-import Items from "./Components/ProductTypes/Items";
 import Context from "./Context";
 
 import styles from "./App.module.scss";
@@ -84,10 +83,7 @@ const App = () => {
       <div className={styles.container}>
         <Header />
         {linkSuccess && isItemAccess && (
-          <>
-            <Products />
-            <Items />
-          </>
+          <Products />
         )}
       </div>
     </div>
