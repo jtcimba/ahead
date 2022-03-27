@@ -1,9 +1,7 @@
 import React, { useEffect, useContext, useCallback } from "react";
-
-import Header from "./Components/Headers";
-import Products from "./Components/ProductTypes/Products";
+import Header from "./Components/Header";
+import Container from "./Components/Container";
 import Context from "./Context";
-
 import styles from "./App.module.scss";
 
 const App = () => {
@@ -83,7 +81,14 @@ const App = () => {
       <div className={styles.container}>
         <Header />
         {linkSuccess && isItemAccess && (
-          <Products />
+          <Container 
+            endpoint="holdings"
+            name="Investments"
+            schema="/investments/holdings/get/"
+            description="Retrieve investment holdings on file with the bank,
+            brokerage, or investment institution. Analyze over-exposure
+            to market segments."
+          />
         )}
       </div>
     </div>

@@ -8,20 +8,12 @@ from plaid.model.recipient_bacs_nullable import RecipientBACSNullable
 from plaid.model.payment_initiation_address import PaymentInitiationAddress
 from plaid.model.payment_initiation_recipient_create_request import PaymentInitiationRecipientCreateRequest
 from plaid.model.payment_initiation_payment_create_request import PaymentInitiationPaymentCreateRequest
-from plaid.model.payment_initiation_payment_get_request import PaymentInitiationPaymentGetRequest
 from plaid.model.link_token_create_request_payment_initiation import LinkTokenCreateRequestPaymentInitiation
 from plaid.model.item_public_token_exchange_request import ItemPublicTokenExchangeRequest
 from plaid.model.link_token_create_request import LinkTokenCreateRequest
 from plaid.model.link_token_create_request_user import LinkTokenCreateRequestUser
-from plaid.model.asset_report_create_request import AssetReportCreateRequest
-from plaid.model.asset_report_create_request_options import AssetReportCreateRequestOptions
-from plaid.model.asset_report_user import AssetReportUser
-from plaid.model.asset_report_get_request import AssetReportGetRequest
-from plaid.model.asset_report_pdf_get_request import AssetReportPDFGetRequest
-from plaid.model.auth_get_request import AuthGetRequest
 from plaid.model.transactions_get_request import TransactionsGetRequest
 from plaid.model.transactions_get_request_options import TransactionsGetRequestOptions
-from plaid.model.identity_get_request import IdentityGetRequest
 from plaid.model.investments_transactions_get_request_options import InvestmentsTransactionsGetRequestOptions
 from plaid.model.investments_transactions_get_request import InvestmentsTransactionsGetRequest
 from plaid.model.accounts_balance_get_request import AccountsBalanceGetRequest
@@ -31,7 +23,6 @@ from plaid.model.item_get_request import ItemGetRequest
 from plaid.model.institutions_get_by_id_request import InstitutionsGetByIdRequest
 from plaid.model.transfer_authorization_create_request import TransferAuthorizationCreateRequest
 from plaid.model.transfer_create_request import TransferCreateRequest
-from plaid.model.transfer_get_request import TransferGetRequest
 from plaid.model.transfer_network import TransferNetwork
 from plaid.model.transfer_type import TransferType
 from plaid.model.transfer_user_in_request import TransferUserInRequest
@@ -239,68 +230,6 @@ def get_access_token():
         return json.loads(e.body)
 
 
-# Retrieve ACH or ETF account numbers for an Item
-# https://plaid.com/docs/#auth
-
-
-@app.route('/api/auth', methods=['GET'])
-def get_auth():
-    try:
-       request = AuthGetRequest(
-            access_token=access_token
-        )
-       response = client.auth_get(request)
-       pretty_print_response(response.to_dict())
-       return jsonify(response.to_dict())
-    except plaid.ApiException as e:
-        error_response = format_error(e)
-        return jsonify(error_response)
-
-
-# Retrieve Transactions for an Item
-# https://plaid.com/docs/#transactions
-
-
-@app.route('/api/transactions', methods=['GET'])
-def get_transactions():
-    # Pull transactions for the last 30 days
-    start_date = (datetime.datetime.now() - timedelta(days=30))
-    end_date = datetime.datetime.now()
-    try:
-        options = TransactionsGetRequestOptions()
-        request = TransactionsGetRequest(
-            access_token=access_token,
-            start_date=start_date.date(),
-            end_date=end_date.date(),
-            options=options
-        )
-        response = client.transactions_get(request)
-        pretty_print_response(response.to_dict())
-        return jsonify(response.to_dict())
-    except plaid.ApiException as e:
-        error_response = format_error(e)
-        return jsonify(error_response)
-
-
-# Retrieve Identity data for an Item
-# https://plaid.com/docs/#identity
-
-
-@app.route('/api/identity', methods=['GET'])
-def get_identity():
-    try:
-        request = IdentityGetRequest(
-            access_token=access_token
-        )
-        response = client.identity_get(request)
-        pretty_print_response(response.to_dict())
-        return jsonify(
-            {'error': None, 'identity': response.to_dict()['accounts']})
-    except plaid.ApiException as e:
-        error_response = format_error(e)
-        return jsonify(error_response)
-
-
 # Retrieve real-time balance data for each of an Item's accounts
 # https://plaid.com/docs/#balance
 
@@ -335,80 +264,6 @@ def get_accounts():
     except plaid.ApiException as e:
         error_response = format_error(e)
         return jsonify(error_response)
-
-
-# Create and then retrieve an Asset Report for one or more Items. Note that an
-# Asset Report can contain up to 100 items, but for simplicity we're only
-# including one Item here.
-# https://plaid.com/docs/#assets
-
-
-@app.route('/api/assets', methods=['GET'])
-def get_assets():
-    try:
-        request = AssetReportCreateRequest(
-            access_tokens=[access_token],
-            days_requested=60,
-            options=AssetReportCreateRequestOptions(
-                webhook='https://www.example.com',
-                client_report_id='123',
-                user=AssetReportUser(
-                    client_user_id='789',
-                    first_name='Jane',
-                    middle_name='Leah',
-                    last_name='Doe',
-                    ssn='123-45-6789',
-                    phone_number='(555) 123-4567',
-                    email='jane.doe@example.com',
-                )
-            )
-        )
-
-        response = client.asset_report_create(request)
-        pretty_print_response(response.to_dict())
-        asset_report_token = response['asset_report_token']
-    except plaid.ApiException as e:
-        error_response = format_error(e)
-        return jsonify(error_response)
-
-    # Poll for the completion of the Asset Report.
-    num_retries_remaining = 20
-    asset_report_json = None
-    while num_retries_remaining > 0:
-        try:
-            request = AssetReportGetRequest(
-                asset_report_token=asset_report_token,
-            )
-            response = client.asset_report_get(request)
-            asset_report_json = response['report']
-            break
-        except plaid.ApiException as e:
-            response = json.loads(e.body)
-            if response['error_code'] == 'PRODUCT_NOT_READY':
-                num_retries_remaining -= 1
-                time.sleep(1)
-                continue
-        error_response = format_error(e)
-        return jsonify(error_response)
-    if asset_report_json is None:
-        return jsonify({'error': {'status_code': e.status, 'display_message':
-                                  'Timed out when polling for Asset Report', 'error_code': '', 'error_type': ''}})
-
-    asset_report_pdf = None
-    try:
-        request = AssetReportPDFGetRequest(
-            asset_report_token=asset_report_token,
-        )
-        pdf = client.asset_report_pdf_get(request)
-        return jsonify({
-            'error': None,
-            'json': asset_report_json.to_dict(),
-            'pdf': base64.b64encode(pdf.read()).decode('utf-8'),
-        })
-    except plaid.ApiException as e:
-        error_response = format_error(e)
-        return jsonify(error_response)
-
 
 # Retrieve investment holdings data for an Item
 # https://plaid.com/docs/#investments
@@ -454,42 +309,8 @@ def get_investments_transactions():
         error_response = format_error(e)
         return jsonify(error_response)
 
-# This functionality is only relevant for the ACH Transfer product.
-# Retrieve Transfer for a specified Transfer ID
-
-@app.route('/api/transfer', methods=['GET'])
-def transfer():
-    global transfer_id
-    try:
-        request = TransferGetRequest(transfer_id=transfer_id)
-        response = client.transfer_get(request)
-        pretty_print_response(response.to_dict())
-        return jsonify({'error': None, 'transfer': response['transfer'].to_dict()})
-    except plaid.ApiException as e:
-        error_response = format_error(e)
-        return jsonify(error_response)
-
-
-# This functionality is only relevant for the UK Payment Initiation product.
-# Retrieve Payment for a specified Payment ID
-
-
-@app.route('/api/payment', methods=['GET'])
-def payment():
-    global payment_id
-    try:
-        request = PaymentInitiationPaymentGetRequest(payment_id=payment_id)
-        response = client.payment_initiation_payment_get(request)
-        pretty_print_response(response.to_dict())
-        return jsonify({'error': None, 'payment': response.to_dict()})
-    except plaid.ApiException as e:
-        error_response = format_error(e)
-        return jsonify(error_response)
-
-
 # Retrieve high-level information about an Item
 # https://plaid.com/docs/#retrieve-item
-
 
 @app.route('/api/item', methods=['GET'])
 def item():

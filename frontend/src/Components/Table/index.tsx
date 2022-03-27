@@ -1,14 +1,10 @@
 import React from "react";
-
-import { DataItem, Categories } from "../../dataUtilities";
-import Identity from "./Identity";
-
+import { InvestmentsDataItem, Categories } from "../../dataUtilities";
 import styles from "./index.module.scss";
 
 interface Props {
-  data: Array<DataItem>;
+  data: Array<InvestmentsDataItem>;
   categories: Array<Categories>;
-  isIdentity: boolean;
 }
 
 const Table = (props: Props) => {
@@ -21,7 +17,7 @@ const Table = (props: Props) => {
   ));
 
   const rows = props.data
-    .map((item: DataItem | any, index) => (
+    .map((item: InvestmentsDataItem | any, index) => (
       <tr key={index} className={styles.dataRows}>
         {props.categories.map((category: Categories, index) => (
           <td key={index} className={styles.dataField}>
@@ -32,9 +28,7 @@ const Table = (props: Props) => {
     ))
     .slice(0, maxRows);
 
-  return props.isIdentity ? (
-    <Identity data={props.data} categories={props.categories} />
-  ) : (
+  return (
     <table className={styles.dataTable}>
       <thead className={styles.header}>
         <tr className={styles.headerRow}>{headers}</tr>
