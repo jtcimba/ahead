@@ -1,0 +1,16 @@
+.button {
+  background-color: var(--theme-color-blue);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 6px;
+  font-family: var(--theme-font-family);
+  font-size: 18px;
+  padding: 10px 15px 10px 15px;
+  margin-top: 20px;
+}
+
+.button:hover {
+  background-color: var(--theme-color-blue);
+  opacity: 0.8;
+  cursor: pointer;
+}

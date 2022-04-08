@@ -16,20 +16,10 @@ const Header = () => {
 
   return (
     <div className={styles.grid}>
-      <h3 className={styles.title}>Ahead</h3>
-
+      <h3 className={styles.title}>ahead</h3>
+      <h4 className={styles.subtitle}>A Roth IRA calculator integrated with Plaid</h4>
       {!linkSuccess ? (
         <>
-          <h4 className={styles.subtitle}>
-            A sample end-to-end integration with Plaid
-          </h4>
-          <p className={styles.introPar}>
-            The Plaid flow begins when your user wants to connect their bank
-            account to your app. Simulate this by clicking the button below to
-            launch Link - the client-side component that your users will
-            interact with in order to link their accounts to Plaid and allow you
-            to access their accounts via the Plaid API.
-          </p>
           {/* message if backend is not running and there is no link token */}
           {!backend ? (
             <Callout warning>
@@ -55,9 +45,9 @@ const Header = () => {
             </Callout>
           ) : linkToken === "" ? (
             <div className={styles.linkButton}>
-              <Button large disabled>
+              <button className={styles.button}>
                 Loading...
-              </Button>
+              </button>
             </div>
           ) : (
             <div className={styles.linkButton}>

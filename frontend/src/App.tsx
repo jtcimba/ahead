@@ -77,20 +77,18 @@ const App = () => {
   }, [dispatch, generateToken, getInfo]);
 
   return (
-    <div className={styles.App}>
-      <div className={styles.container}>
-        <Header />
-        {linkSuccess && isItemAccess && (
-          <Container 
-            endpoint="holdings"
-            name="Investments"
-            schema="/investments/holdings/get/"
-            description="Retrieve investment holdings on file with the bank,
-            brokerage, or investment institution. Analyze over-exposure
-            to market segments."
-          />
-        )}
-      </div>
+    <div className={styles.container}>
+      <Header />
+      {linkSuccess && isItemAccess && (
+        <Container 
+          endpoint="holdings"
+          name="Investments"
+          schema="/investments/holdings/get/"
+          description="Retrieve investment holdings on file with the bank,
+          brokerage, or investment institution. Analyze over-exposure
+          to market segments."
+        />
+      )}
     </div>
   );
 };

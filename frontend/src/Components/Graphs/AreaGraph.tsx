@@ -1,19 +1,27 @@
 import React from "react";
-import { VictoryStack, VictoryArea } from "victory";
+import { VictoryChart, VictoryBar } from "victory";
+import styles from "./index.module.scss";
 
-const AreaGraph = () => {
+interface Props {
+  data: Array<any>;
+}
+
+const AreaGraph = (props: Props) => {
   return (
-    <VictoryStack>
-      <VictoryArea
-        data={[{x: "a", y: 2}, {x: "b", y: 3}, {x: "c", y: 5}]}
-      />
-      <VictoryArea
-        data={[{x: "a", y: 1}, {x: "b", y: 4}, {x: "c", y: 5}]}
-      />
-      <VictoryArea
-        data={[{x: "a", y: 3}, {x: "b", y: 2}, {x: "c", y: 6}]}
-      />
-    </VictoryStack>
+    <div className={styles.container}>
+      <VictoryChart
+        domainPadding={{x: 20}}
+      >
+        <VictoryBar
+          style={{ data: { fill: '#7BA877'} }}
+          data={props.data}
+          animate={{
+            duration: 2000,
+            onLoad: { duration: 1000 }
+          }}
+        />
+      </VictoryChart>
+    </div>
   );
 };
 
