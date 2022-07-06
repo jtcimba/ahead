@@ -1,23 +1,24 @@
-import React, { useContext } from "react";
-import Callout from "plaid-threads/Callout";
-import Button from "plaid-threads/Button";
-import Link from "../Link";
-import Context from "../../Context";
+import React, { useEffect, useContext, useCallback } from "react";
+import Context from "../Context";
 import styles from "./index.module.scss";
+import Callout from "plaid-threads/Callout";
+import Link from "./Link";
+import { Navigate } from "react-router-dom";
 
-const Header = () => {
+const LandingPage = () => {
   const {
     linkToken,
     linkSuccess,
     isItemAccess,
     backend,
-    linkTokenError,
+    linkTokenError
   } = useContext(Context);
 
   return (
-    <div className={styles.grid}>
+    <div className={styles.container}>
+      <div className={styles.grid}>
       <h3 className={styles.title}>ahead</h3>
-      <h4 className={styles.subtitle}>A Roth IRA calculator integrated with Plaid</h4>
+      <h4 className={styles.subtitle}>A compound interest calculator integrated with Plaid</h4>
       {!linkSuccess ? (
         <>
           {/* message if backend is not running and there is no link token */}
@@ -58,7 +59,7 @@ const Header = () => {
       ) : (
         <>
           {isItemAccess ? (
-            <></>
+            <Navigate to="/dashboard" replace={true} />
           ) : (
             <h4 className={styles.subtitle}>
               <Callout warning>
@@ -68,9 +69,9 @@ const Header = () => {
           )}
         </>
       )}
+      </div>
     </div>
-  );
+  )
 };
 
-Header.displayName = "Header";
-export default Header;
+export default LandingPage;

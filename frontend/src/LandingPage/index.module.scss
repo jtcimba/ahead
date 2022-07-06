@@ -1,0 +1,65 @@
+$threads-font-path: "~plaid-threads/fonts";
+@import "~plaid-threads/scss/typography";
+@import "~plaid-threads/scss/variables";
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --theme-color-gray: #{#2A2D2E};
+  --theme-color-gold: #{#F0AA2F};
+  --theme-color-blue: #{#76A1D3};
+  --theme-color-light-gray: #{#C8C8C8};
+  --theme-font-family: 'Merriweather', serif;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: var(--theme-color-gray);
+  margin: 0px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  background-color: var(--theme-color-gray);
+  padding-bottom: 40px;
+}
+
+.title {
+  color: white;
+  font-family: var(--theme-font-family);
+  font-weight: bold;
+  font-size: 54px;
+  margin-top: 48px;
+  margin-bottom: 0px;
+}
+
+.subtitle {
+  color: white;
+  font-family: var(--theme-font-family);
+  font-size: 20px;
+  margin-top: 0px;
+  padding-bottom: 20px;
+}
+
+.description {
+  color: white;
+  font-family: var(--theme-font-family);
+  font-size: 14px;
+  margin-top: 0px;
+}
+
+.grid {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  // margin: auto;
+  // margin-bottom: 2 * $unit;
+  align-items: center;
+}

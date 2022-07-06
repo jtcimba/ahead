@@ -1,11 +1,14 @@
-import React, { useEffect, useContext, useCallback } from "react";
-import Header from "./Components/Header";
-import Container from "./Components/Container";
+import { useEffect, useContext, useCallback } from "react";
+import Dashboard from "./Dashboard";
+import LandingPage from "./LandingPage";
 import Context from "./Context";
-import styles from "./App.module.scss";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import RequireAuth from "./RequireAuth";
 
 const App = () => {
-  const { linkSuccess, isItemAccess, dispatch } = useContext(Context);
+  const {
+    dispatch
+  } = useContext(Context);
 
   const getInfo = useCallback(async () => {
     const response = await fetch("/api/info", { method: "POST" });
@@ -77,20 +80,20 @@ const App = () => {
   }, [dispatch, generateToken, getInfo]);
 
   return (
-    <div className={styles.container}>
-      <Header />
-      {linkSuccess && isItemAccess && (
-        <Container 
-          endpoint="holdings"
-          name="Investments"
-          schema="/investments/holdings/get/"
-          description="Retrieve investment holdings on file with the bank,
-          brokerage, or investment institution. Analyze over-exposure
-          to market segments."
+    <Router>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route
+          path="/dashboard"
+          element={
+            <RequireAuth>
+              <Dashboard />
+            </RequireAuth>
+          } 
         />
-      )}
-    </div>
-  );
+      </Routes>
+    </Router>
+  )
 };
 
 export default App;

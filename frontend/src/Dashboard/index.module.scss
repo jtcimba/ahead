@@ -1,14 +1,14 @@
 .futureBalance {
   font-size: 28px;
   font-family: var(--theme-font-family);
-  color: var(--theme-color-dark-gray);
+  color: white;
   padding-bottom: 12px;
 }
 
 .description {
   font-family: var(--theme-font-family);
   font-size: 20px;
-  color: var(--theme-color-dark-gray);
+  color: white;
 }
 
 .result {
@@ -16,7 +16,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: var(--theme-color-dark-gray);
+  color: white;
 }
 
 .underline {
@@ -32,8 +32,8 @@
   font-family: var(--theme-font-family);
   font-size: 14px;
   display: flex;
-  justify-content: space-between;
-  color: var(--theme-color-dark-gray);
+  flex-direction: column;
+  color: white;
   padding: 10px 15px 10px 15px;
 }
 
@@ -41,9 +41,16 @@
   width: 55px;
   border: none;
   border-bottom: 2px solid var(--theme-color-blue);
-  color: var(--theme-color-dark-gray);
+  color: white;
   font-family: var(--theme-font-family);
   text-align: center;
+}
+
+.accountBalance {
+  font-family: var(--theme-font-family);
+  text-align: center;
+  border: none;
+  width: 55px;
 }
 
 .label {
@@ -51,4 +58,14 @@
   flex-direction: column;
   align-items: center;
   padding: 0px 15px 0px 15px;
+}
+
+.bold {
+  color: white;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }

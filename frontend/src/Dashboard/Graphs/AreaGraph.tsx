@@ -13,7 +13,7 @@ const AreaGraph = (props: Props) => {
         domainPadding={{x: 20}}
       >
         <VictoryBar
-          style={{ data: { fill: '#7BA877'} }}
+          style={{ data: { fill: '#F0AA2F'} }}
           data={props.data}
           animate={{
             duration: 2000,
