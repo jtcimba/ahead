@@ -4,6 +4,18 @@ import LandingPage from "./LandingPage";
 import Context from "./Context";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import RequireAuth from "./RequireAuth";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#69d1b2'
+    },
+    secondary: {
+      main: '#FFFFFF'
+    }
+  }
+})
 
 const App = () => {
   const {
@@ -80,19 +92,21 @@ const App = () => {
   }, [dispatch, generateToken, getInfo]);
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route
-          path="/dashboard"
-          element={
-            <RequireAuth>
-              <Dashboard />
-            </RequireAuth>
-          } 
-        />
-      </Routes>
-    </Router>
+    <ThemeProvider theme={theme}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route
+            path="/dashboard"
+            element={
+              <RequireAuth>
+                <Dashboard />
+              </RequireAuth>
+            } 
+          />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   )
 };
 
