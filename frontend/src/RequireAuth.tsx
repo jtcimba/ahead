@@ -7,7 +7,7 @@ const RequireAuth = ({children}: any) => {
     linkSuccess,
   } = useContext(Context);
 
-  return linkSuccess == true ? children : <Navigate to="/" replace />;
+  return linkSuccess === true ? children : <Navigate to="/" replace />;
 }
 
 export default RequireAuth;

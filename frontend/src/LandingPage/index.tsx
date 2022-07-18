@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useCallback } from "react";
+import { useContext } from "react";
 import Context from "../Context";
 import styles from "./index.module.scss";
 import Callout from "plaid-threads/Callout";
