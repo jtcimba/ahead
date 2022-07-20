@@ -29,17 +29,17 @@ const Dashboard = () => {
 
   useEffect(() => {
     let futureAmount = currentBalance * (Math.pow((1+(rate*0.01)), duration)) +
-                       ((rate === 0) ? contributions * duration 
-                       : contributions * ((Math.pow((1+(rate*0.01)), duration)-1)/(rate*0.01)) * (1+rate*0.01));
-    // const thisYear = new Date().getFullYear();
-    // let dataSet = [{x: thisYear.toString(), y: currentBalance}];
-    // let i = 1;
-    // while (i <= duration) {
-    //   let total = currentBalance * (Math.pow((1+(rate*0.01)), i)) + contributions * ((Math.pow((1+(rate*0.01)), i)-1)/(rate*0.01));
-    //   dataSet.push({x: (thisYear+i).toString(), y: parseFloat(total.toFixed(2))});
-    //   i++;
-    // }
-    // setGraphData(dataSet);
+                       contributions * ((rate === 0) ? duration :
+                       ((Math.pow((1+(rate*0.01)), duration)-1)/(rate*0.01)) * (1+rate*0.01));
+    const thisYear = new Date().getFullYear();
+    let dataSet = [{x: thisYear.toString(), y: currentBalance}];
+    for (let i = 1; i <= duration; i++) {
+      let total = currentBalance * (Math.pow((1+(rate*0.01)), i)) + 
+                  contributions * ((rate === 0) ? i : 
+                  ((Math.pow((1+(rate*0.01)), i)-1)/(rate*0.01)));
+      dataSet.push({x: (thisYear+i).toString(), y: total});
+    }
+    setGraphData(dataSet);
     setFutureBalance((futureAmount).toFixed(2));
   }, [duration, contributions, rate, currentBalance])
 

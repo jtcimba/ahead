@@ -10,7 +10,7 @@ const AreaGraph = (props: Props) => {
   return (
     <div className={styles.container}>
       <VictoryChart
-        domainPadding={{x: 20}}
+        domainPadding={{x: 40}}
       >
         <VictoryBar
           style={{ data: { fill: '#F0AA2F'} }}
