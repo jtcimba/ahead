@@ -5,11 +5,14 @@ import Header from "./Header";
 import TextField from '@mui/material/TextField';
 import NumberFormat from 'react-number-format';
 import FormControl from '@mui/material/FormControl';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 
 const Dashboard = () => {
-  const [currentBalance, setCurrentBalance] = useState<any>(0);
+  const [accounts, setAccounts] = useState<any>([]);
+  const [selectedAccount, setSelectedAccount] = useState<any>({});
   const [futureBalance, setFutureBalance] = useState<any>();
-  const [accountName, setAccountName] = useState<string>('');
   const [duration, setDuration] = useState<any>(5);
   const [contributions, setContributions] = useState<any>(6000);
   const [rate, setRate] = useState<any>(6.0);
@@ -19,29 +22,31 @@ const Dashboard = () => {
     fetch('/api/holdings', { method: "GET" })
       .then(response => response.json())
       .then(result => { 
-        return result.holdings.accounts.find((element: { subtype: string; }) => element.subtype === "ira")
+        return result.holdings.accounts.filter((element: { type: string; }) => element.type === "depository" || element.type ==="investment")
       })
-      .then(account => {
-        setCurrentBalance(account.balances.current);
-        setAccountName(account.name);
+      .then(allAccounts => {
+        setAccounts(allAccounts);
+        setSelectedAccount(allAccounts[0]);
       });
   }, [])
 
   useEffect(() => {
-    let futureAmount = currentBalance * (Math.pow((1+(rate*0.01)), duration)) +
-                       contributions * ((rate === 0) ? duration :
-                       ((Math.pow((1+(rate*0.01)), duration)-1)/(rate*0.01)) * (1+rate*0.01));
-    const thisYear = new Date().getFullYear();
-    let dataSet = [{x: thisYear.toString(), y: currentBalance}];
-    for (let i = 1; i <= duration; i++) {
-      let total = currentBalance * (Math.pow((1+(rate*0.01)), i)) + 
-                  contributions * ((rate === 0) ? i : 
-                  ((Math.pow((1+(rate*0.01)), i)-1)/(rate*0.01)));
-      dataSet.push({x: (thisYear+i).toString(), y: total});
+    if (selectedAccount.balances?.current) {
+      let futureAmount = selectedAccount.balances.current * (Math.pow((1+(rate*0.01)), duration)) +
+                         contributions * ((rate === 0) ? duration :
+                         ((Math.pow((1+(rate*0.01)), duration)-1)/(rate*0.01)) * (1+rate*0.01));
+      const thisYear = new Date().getFullYear();
+      let dataSet = [{x: thisYear.toString(), y: selectedAccount.balances.current}];
+      for (let i = 1; i <= duration; i++) {
+        let total = selectedAccount.balances.current * (Math.pow((1+(rate*0.01)), i)) + 
+                    contributions * ((rate === 0) ? i : 
+                    ((Math.pow((1+(rate*0.01)), i)-1)/(rate*0.01)));
+        dataSet.push({x: (thisYear+i).toString(), y: total});
+      }
+      setGraphData(dataSet);
+      setFutureBalance((futureAmount).toFixed(2));
     }
-    setGraphData(dataSet);
-    setFutureBalance((futureAmount).toFixed(2));
-  }, [duration, contributions, rate, currentBalance])
+  }, [duration, contributions, rate, selectedAccount])
 
   const handleBlur = (value: string, id: string) => {
     if (value === '') {
@@ -61,13 +66,32 @@ const Dashboard = () => {
     }
   };
 
+  const handleAccountClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    account: any,
+  ) => {
+    setSelectedAccount(account);
+  };
+
   return (
     <div>
       <Header/>
       <div className={styles.container}>
         <div>
-          <div>Accounts</div>
-          <div className={styles.description}>{accountName}  ${currentBalance}</div>
+          <div className={styles.description}>Accounts</div>
+          <List>{accounts?.map((account: any, i: number) => {
+            return (
+            <ListItem key={i}>
+              <ListItemButton
+                selected={account.name === selectedAccount.name}
+                onClick={(event) => handleAccountClick(event, account)}
+              >
+                <div className={styles.description}>{account.name}  ${account.balances.current}</div>
+              </ListItemButton>
+            </ListItem>
+            )
+          })}
+          </List>
         </div>
         <AreaGraph 
           data={graphData}
