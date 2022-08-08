@@ -6,6 +6,7 @@ interface QuickstartState {
   linkToken: string | null;
   accessToken: string | null;
   itemId: string | null;
+  profile: string;
   isError: boolean;
   backend: boolean;
   products: string[];
@@ -22,6 +23,7 @@ const initialState: QuickstartState = {
   linkToken: "", // Don't set to null or error message will show up briefly when site loads
   accessToken: null,
   itemId: null,
+  profile: "",
   isError: false,
   backend: true,
   products: ["transactions"],

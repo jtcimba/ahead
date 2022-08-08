@@ -19,6 +19,7 @@ from plaid.model.investments_transactions_get_request import InvestmentsTransact
 from plaid.model.accounts_balance_get_request import AccountsBalanceGetRequest
 from plaid.model.accounts_get_request import AccountsGetRequest
 from plaid.model.investments_holdings_get_request import InvestmentsHoldingsGetRequest
+from plaid.model.identity_get_request import IdentityGetRequest
 from plaid.model.item_get_request import ItemGetRequest
 from plaid.model.institutions_get_by_id_request import InstitutionsGetByIdRequest
 from plaid.model.transfer_authorization_create_request import TransferAuthorizationCreateRequest
@@ -284,6 +285,16 @@ def get_holdings():
 # Retrieve Investment Transactions for an Item
 # https://plaid.com/docs/#investments
 
+@app.route('/api/identity', methods=['GET'])
+def get_identity():
+    try:
+        request = IdentityGetRequest(access_token=access_token)
+        response = client.identity_get(request)
+        pretty_print_response(response.to_dict())
+        return jsonify({'error': None, 'identity': response.to_dict()})
+    except plaid.ApiException as e:
+        error_response = format_error(e)
+        return jsonify(error_response)
 
 @app.route('/api/investments_transactions', methods=['GET'])
 def get_investments_transactions():

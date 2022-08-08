@@ -38,7 +38,21 @@ const Link = () => {
           },
         });
       };
+      const setProfile = async () => {
+        const response = await fetch('/api/identity', { method: "GET"});
+        if (!response.ok) {
+          return;
+        }
+        const identities = await response.json();
+        dispatch({
+          type: "SET_STATE",
+          state: {
+            profile: identities.identity.accounts[0].owners[0].names[0].split(" ")[0]
+          }
+        })
+      }
       setToken();
+      setProfile();
       dispatch({ type: "SET_STATE", state: { linkSuccess: true } });
       window.history.pushState("", "", "/");
     },
@@ -48,7 +62,7 @@ const Link = () => {
   let isOauth = false;
   const config: Parameters<typeof usePlaidLink>[0] = {
     token: linkToken!,
-    onSuccess,
+    onSuccess
   };
 
   if (window.location.href.includes("?oauth_state_id=")) {
