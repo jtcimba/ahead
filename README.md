@@ -1,1 +1,1 @@
-Using Plaid to calculate investment growth of securities account based on current holdings and contributions
+A modern financial dashboard for the modern investor
