@@ -20,7 +20,7 @@ interface QuickstartState {
 const initialState: QuickstartState = {
   linkSuccess: false,
   isItemAccess: true,
-  linkToken: "", // Don't set to null or error message will show up briefly when site loads
+  linkToken: "",
   accessToken: null,
   itemId: null,
   profile: "",

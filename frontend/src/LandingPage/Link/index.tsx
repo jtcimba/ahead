@@ -2,13 +2,13 @@ import React, { useEffect, useContext } from "react";
 import { usePlaidLink } from "react-plaid-link";
 import styles from "./index.module.scss";
 import Context from "../../Context";
+import Button from "@mui/material/Button";
 
 const Link = () => {
   const { linkToken, dispatch } = useContext(Context);
 
   const onSuccess = React.useCallback(
     (public_token: string) => {
-      // send public_token to server
       const setToken = async () => {
         const response = await fetch("/api/set_access_token", {
           method: "POST",
@@ -47,7 +47,7 @@ const Link = () => {
         dispatch({
           type: "SET_STATE",
           state: {
-            profile: identities.identity.accounts[0].owners[0].names[0].split(" ")[0]
+            profile: identities.identity.accounts[0].owners[0].names[0]
           }
         })
       }
@@ -81,9 +81,9 @@ const Link = () => {
   }, [ready, open, isOauth]);
 
   return (
-    <button className={styles.button} type="button" onClick={() => open()} disabled={!ready}>
+    <Button sx={{fontSize: '16px'}} className={styles.getStartedButton} variant="contained" onClick={() => open()} disabled={!ready}>
       Get Started
-    </button>
+    </Button>
   );
 };
 

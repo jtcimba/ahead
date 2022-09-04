@@ -1,16 +1,9 @@
-.button {
-  background-color: var(--theme-color-gold);
-  color: #FFFFFF;
-  border: none;
-  border-radius: 6px;
-  font-family: var(--theme-font-family);
-  font-size: 18px;
-  padding: 10px 15px 10px 15px;
-  margin-top: 20px;
+.getStartedButton {
+  font-size: 36px;
 }
 
-.button:hover {
-  background-color: var(--theme-color-gold);
+.getStartedButton:hover {
+  background-color: var(--theme-color-midnight-blue);
   opacity: 0.8;
   cursor: pointer;
 }

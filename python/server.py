@@ -186,13 +186,26 @@ def create_link_token_for_payment():
     except plaid.ApiException as e:
         return json.loads(e.body)
 
+@app.route('/api/auth', methods=['GET'])
+def get_auth():
+    try:
+       request = AuthGetRequest(
+            access_token=access_token
+        )
+       response = client.auth_get(request)
+       pretty_print_response(response.to_dict())
+       return jsonify(response.to_dict())
+    except plaid.ApiException as e:
+        error_response = format_error(e)
+        return jsonify(error_response)
+
 
 @app.route('/api/create_link_token', methods=['POST'])
 def create_link_token():
     try:
         request = LinkTokenCreateRequest(
             products=products,
-            client_name="Plaid Quickstart",
+            client_name="Ahead",
             country_codes=list(map(lambda x: CountryCode(x), PLAID_COUNTRY_CODES)),
             language='en',
             user=LinkTokenCreateRequestUser(
