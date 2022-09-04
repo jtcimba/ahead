@@ -1,72 +1,24 @@
-.futureBalance {
-  font-size: 28px;
-  font-family: var(--theme-font-family);
-  color: white;
-  padding-bottom: 12px;
+.logo {
+  width: 100px;
+  padding-bottom: 25px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.description {
-  font-family: var(--theme-font-family);
-  font-size: 20px;
-  color: white;
+.accountsHeader {
+  font-weight: bold;
+  font-size: 16px;
+  padding-top: 35px;
+  padding-bottom: 10px;
 }
 
-.result {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: white;
-}
-
-.underline {
-  text-decoration-color: var(--theme-color-blue);
-}
-
-.form {
-  background-color: var(--theme-color-off-white);
-  border-radius: 6px;
-  box-shadow: 0px 12px 0px 8px var(--theme-color-dark-gray);
-  border-style: solid;
-  border-color: var(--theme-color-neutral-gray);
-  font-family: var(--theme-font-family);
+.accountName {
   font-size: 14px;
-  display: flex;
-  flex-direction: column;
-  color: white;
-  padding: 10px 15px 10px 15px;
 }
 
-.input {
-  width: 55px;
-  border: none;
-  border-bottom: 2px solid var(--theme-color-blue);
-  color: white;
-  background-color: transparent;
-  font-family: var(--theme-font-family);
-  text-align: center;
-}
-
-.accountBalance {
-  font-family: var(--theme-font-family);
-  text-align: center;
-  border: none;
-  width: 55px;
-}
-
-.label {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0px 15px 0px 15px;
-}
-
-.bold {
-  color: white;
-}
-
-.container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+.profileName {
+  font-size: 14px;
+  padding-left: 10px;
+  padding-top: 2px;
 }

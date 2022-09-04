@@ -4,6 +4,8 @@ import styles from "./index.module.scss";
 import Callout from "plaid-threads/Callout";
 import Link from "./Link";
 import { Navigate } from "react-router-dom";
+import logo from "../assets/ahead.svg";
+import Box from "@mui/material/Box";
 
 const LandingPage = () => {
   const {
@@ -15,10 +17,9 @@ const LandingPage = () => {
   } = useContext(Context);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.grid}>
-      <h3 className={styles.title}>ahead</h3>
-      <h4 className={styles.subtitle}>A compound interest calculator integrated with Plaid</h4>
+    <Box className={styles.landingPage}>
+      <img src={logo} alt="ahead logo"/>
+      <h4>A modern financial dashboard for the modern investor</h4>
       {!linkSuccess ? (
         <>
           {/* message if backend is not running and there is no link token */}
@@ -44,17 +45,11 @@ const LandingPage = () => {
               </div>
               <div>Error Message: {linkTokenError.error_message}</div>
             </Callout>
-          ) : linkToken === "" ? (
-            <div className={styles.linkButton}>
-              <button className={styles.button}>
-                Loading...
-              </button>
-            </div>
-          ) : (
-            <div className={styles.linkButton}>
+          ) : 
+            <div>
               <Link />
             </div>
-          )}
+          }
         </>
       ) : (
         <>
@@ -69,8 +64,7 @@ const LandingPage = () => {
           )}
         </>
       )}
-      </div>
-    </div>
+    </Box>
   )
 };
 
