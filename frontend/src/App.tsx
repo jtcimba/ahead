@@ -21,6 +21,9 @@ const theme = createTheme({
       light: '#FFFFFF',
       main: '#EEEEEE'
     },
+  },
+  typography: {
+    fontFamily: 'DM Sans'
   }
 })
 
