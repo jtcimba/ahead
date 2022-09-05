@@ -1,12 +1,9 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, SyntheticEvent } from "react";
 import AreaGraph from "./Graphs/AreaGraph";
 import styles from "./index.module.scss";
 import TextField from '@mui/material/TextField';
 import NumberFormat from 'react-number-format';
 import FormControl from '@mui/material/FormControl';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
 import Box from '@mui/material/Box';
 import logo from "../assets/ahead.svg";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -14,6 +11,8 @@ import Context from "../Context";
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 import { useTheme } from '@mui/material/styles';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 var formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -31,6 +30,7 @@ const Dashboard = () => {
   const [rate, setRate] = useState<any>(6.0);
   const [graphData, setGraphData] = useState<any>([]);
   const {profile} = useContext(Context);
+  const [tabValue, setTabValue] = useState(0);
 
   useEffect(() => {
     fetch('/api/holdings', { method: "GET" })
@@ -76,12 +76,10 @@ const Dashboard = () => {
     }
   };
 
-  const handleAccountClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    account: any,
-  ) => {
-    setSelectedAccount(account);
-  };
+  const handleTabChange = (event: SyntheticEvent, newValue: number) => {
+    setTabValue(newValue)
+    setSelectedAccount(accounts[newValue])
+  }
 
   return (
     <Box sx={{ display: 'flex', backgroundColor: 'white' }}>
@@ -99,29 +97,20 @@ const Dashboard = () => {
       >
         <Box>
           <img src={logo} className={styles.logo} alt="ahead logo"/>
-          <Box sx={{
-            display: 'flex',
-            alignItems: 'center',
-            flexDirection: 'column'
-          }}>
-            <div className={styles.accountsHeader}>Accounts</div>
-            <Box sx={{maxHeight: '65vh', overflow: 'auto'}}>
-              <List>{accounts?.map((account: any, i: number) => {
-                return (
-                <ListItem key={i}>
-                  <ListItemButton
-                    selected={account.name === selectedAccount.name}
-                    onClick={(event) => handleAccountClick(event, account)}
-                    sx={{justifyContent: 'center', textAlign: 'center'}}
-                  >
-                    <div className={styles.accountName}>{account.name}</div>
-                  </ListItemButton>
-                </ListItem>
-                )
-              })}
-              </List>
-            </Box>
-          </Box>
+          <div className={styles.accountsHeader}>Accounts</div>
+          <Tabs
+            value={tabValue}
+            variant="scrollable"
+            scrollButtons="auto"
+            orientation="vertical"
+            onChange={handleTabChange}
+            sx={{maxHeight: '400px'}}
+          >{
+            accounts?.map((account: any) => {
+              return <Tab sx={{textTransform: 'none', fontSize: '14px', padding: '5px'}} label={account.name}/>
+            })
+          }
+          </Tabs>
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', padding: '20px 10px 10px 10px'}}>
             <AccountCircleIcon sx={{fontSize: '2rem'}}/>
