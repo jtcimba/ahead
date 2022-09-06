@@ -8,7 +8,7 @@ const Link = () => {
   const { linkToken, dispatch } = useContext(Context);
 
   const onSuccess = React.useCallback(
-    (public_token: string) => {
+      async (public_token: string) => {
       const setToken = async () => {
         const response = await fetch("/api/set_access_token", {
           method: "POST",
@@ -24,36 +24,41 @@ const Link = () => {
               itemId: `no item_id retrieved`,
               accessToken: `no access_token retrieved`,
               isItemAccess: false,
+              linkSuccess: false
+            },
+          });
+          return;
+        } else {
+          const data = await response.json();
+          dispatch({
+            type: "SET_STATE",
+            state: {
+              itemId: data.item_id,
+              accessToken: data.access_token,
+              isItemAccess: true,
+              linkSuccess: true
             },
           });
           return;
         }
-        const data = await response.json();
-        dispatch({
-          type: "SET_STATE",
-          state: {
-            itemId: data.item_id,
-            accessToken: data.access_token,
-            isItemAccess: true,
-          },
-        });
       };
       const setProfile = async () => {
         const response = await fetch('/api/identity', { method: "GET"});
         if (!response.ok) {
           return;
+        } else {
+          const identities = await response.json();
+          dispatch({
+            type: "SET_STATE",
+            state: {
+              profile: identities.identity.accounts[0].owners[0].names[0]
+            }
+          })
         }
-        const identities = await response.json();
-        dispatch({
-          type: "SET_STATE",
-          state: {
-            profile: identities.identity.accounts[0].owners[0].names[0]
-          }
-        })
+        return;
       }
-      setToken();
-      setProfile();
-      dispatch({ type: "SET_STATE", state: { linkSuccess: true } });
+      await setToken();
+      await setProfile();
       window.history.pushState("", "", "/");
     },
     [dispatch]
