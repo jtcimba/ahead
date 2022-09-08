@@ -125,7 +125,7 @@ const Dashboard = () => {
         padding: '70px 100px 50px 100px'}}>
         <Box sx={{maxWidth: '850px'}}>
           <Box sx={{padding: '0px 0px 10px 0px'}}>
-            <Box>Current Balance: {formatter.format(selectedAccount.balances?.current)}</Box>
+            <Box>Current Balance: {(selectedAccount.balances) ? formatter.format(selectedAccount.balances?.current) : '--'}</Box>
           </Box>
           <Grid container spacing={4} sx={{}}>
             <Grid item sm={12} md={8} sx={{display: 'flex', flexGrow: '1'}}>
@@ -139,7 +139,7 @@ const Dashboard = () => {
               <Grid item>
                 <Card sx={{ backgroundColor: `${theme.palette.primary.main}`, color: 'white', padding: '15px', borderRadius: '15px'}}>
                   <Box>Future Balance</Box>
-                  <Box sx={{fontSize: '20px'}}>{formatter.format(futureBalance)}</Box>
+                  <Box sx={{fontSize: '20px'}}>{(futureBalance) ? formatter.format(futureBalance): '--'}</Box>
                   <Box sx={{color: `${theme.palette.info.main}`, fontSize: '12px'}}>after {duration} years</Box>
                 </Card>
               </Grid>
