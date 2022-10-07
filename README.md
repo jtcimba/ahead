@@ -1,11 +1,6 @@
----
-description: >-
-  Ahead is a modern financial dashboard for the modern investor. Users connect
-  to their financial institution using Plaid and run investment simulations on
-  selected accounts. It runs on a Flask backend.
----
-
 # Ahead
+
+Ahead is a modern financial dashboard for the modern investor. Users connect to their financial institution using Plaid and run investment simulations on selected accounts. It runs on a Flask backend.
 
 ## Get Started
 
